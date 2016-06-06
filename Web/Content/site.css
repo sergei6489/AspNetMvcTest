@@ -1,0 +1,11 @@
+﻿body {
+}
+.input-group-addon {
+width:auto;
+}
+  .carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 500px;
+	  height: 350px;
+      margin: auto;
+  }

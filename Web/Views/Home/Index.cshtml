@@ -1,0 +1,93 @@
+﻿@model Web.ViewModel.ProductListViewModel
+@{
+    bool isFirst = true;
+}
+<script>
+    function ScrollingProducts(idContainer, idElement, scrollUrl, itemsDownloadCount) {
+        var self = this;
+        self.idContainer = idContainer;
+        self.idElement = idElement;
+        self.PageIndex = 1;
+        self.scrollUrl = scrollUrl;
+        self.itemsDownloadCount = itemsDownloadCount;
+        self.category = "Все";
+
+        $('.categoryCss').click(function () {
+            if (self.category != this.innerText) {
+                $(this).parent().attr("class", "active");
+                $("[id='" + self.category + "'").parent().attr("class", null);
+                self.category = this.innerText;
+                self.PageIndex = 1;
+            }
+        });
+
+
+        $(window).scroll(function () {
+            if ($(window).scrollTop() ==
+                   $(document).height() - $(window).height()) {
+                UploadData();
+            }
+        });
+
+        $("#" + idElement).click(function () {
+            UploadData();
+        });
+
+        function UploadData() {
+            self.PageIndex++;
+            $.ajax({
+                url: self.scrollUrl,
+                contentType: "application/json",
+                type: "POST",
+                data: JSON.stringify({ PageNumber: self.PageIndex, PageItems: self.itemsDownloadCount, category: self.category }),
+                complete: function (key, value) {
+                    $("#" + self.idContainer).append(key.responseText);
+                }
+            });
+        }
+    }
+</script>
+<script>
+    function DeleteProduct(id) {
+        $("#" + id).remove();
+    }
+    $(document).ready(function () {
+        var scrolling = new ScrollingProducts("productsId", 'getProducts', '@Url.Action( "GetProducts", "Product" )', 9);
+    });
+</script>
+
+<div class="row">
+    <div class="col-md-3">
+        <ul class="list-group nav nav-pills nav-stacked">
+            @foreach( var category in Model.Categories )
+            {
+                <li class="@(category.Value == true ? "active" : "")">
+                    @Ajax.ActionLink( category.Key, "FilterByCategory", "Product", new { category = category.Key }, new AjaxOptions() { UpdateTargetId = "productsId" }, new { @class = "categoryCss", id = category.Key } )
+                </li>
+            }
+        </ul>
+    </div>
+        <div class="col-md-9">
+            <div id="myCarousel" class="carousel slide">
+                <div class="carousel-inner">
+                    @foreach( var bytes in Model.Products.Select( n => n.Image ).Take(4) )
+                    {
+                        <div class="item @(isFirst==true ? "active" : "")"> <img src="@String.Format( "data:image/gif;base64,{0}", Convert.ToBase64String( bytes ) )"  /> </div>
+                        isFirst=false;
+                    }
+                </div>
+                <a class="carousel-control left" href="#myCarousel" data-slide="prev"></a>
+                <a class="carousel-control right" href="#myCarousel" data-slide="next"></a>
+            </div>
+        <div style="padding-bottom: 50px; padding-top:30px; ">
+            <div class="row" id="productsId">
+                @Html.Partial( "_ProductPage", Model.Products )
+            </div>
+            <div class="row-fluid" style="position: absolute; bottom: 0; width: 100%">
+                <a id="getProducts" href="#" class="col-sm-offset-6 btn btn-primary">Загрузить товар...</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+

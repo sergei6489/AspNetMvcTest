@@ -1,0 +1,51 @@
+﻿@model List<Core.Product>
+@{
+    string base64;
+    string imgSrc;
+}
+
+@foreach( var list in Model.GetSomeElements( 3 ) )
+{
+
+    foreach( var product in list )
+    {
+        base64 = Convert.ToBase64String( product.Image );
+        imgSrc = String.Format( "data:image/gif;base64,{0}", base64 );
+    <div class="col-md-4" id="@product.Id">
+        <div class="thumbnail">
+            <img src='@imgSrc' style="width:100px; height:100px;" />
+            <div class="caption clearfix">
+                <h4 class="pull-right">$@product.Price</h4>
+                <h5>
+                    @Html.ActionLink( @product.Name, "Detail", "Product", new { id = product.Id }, null )
+                </h5>
+
+                <div class="btn-group-vertical">
+                    @Ajax.ActionLink( "Добавить в корзину", "AddToCart", "Home", new { id = product.Id },
+                                new AjaxOptions()
+                                {
+                                    OnSuccess = "IncrementCart"
+                                },
+                                new { @class = "btn btn-sm btn-default pull-right" } )
+                    @if( ViewBag.IsAdmin )
+                    {
+                        <div class="btn-group pull-right">
+                            <button class="btn btn-sm btn-danger dropdown-toggle" data-toggle="dropdown">
+                                Администрирование
+                                 <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink( "Редактировать", "Edit", "Product", new { id = product.Id }, null )</li>
+                                <li>@Ajax.ActionLink( "Удалить", "Delete", "Product", new { id = product.Id }, new AjaxOptions() { OnSuccess = "DeleteProduct" }, null ) </li>
+                            </ul>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+}
+
+
+

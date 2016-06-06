@@ -1,0 +1,62 @@
+﻿@model Web.IocNinject.Cart
+
+<script>
+    var getCartUrl = '@Url.Action( "GetCart", "Cart" )';
+    var setProductCountCartUrl = '@Url.Action( "SetProductCountCart", "Cart" )';
+    var removeProduct = '@Url.Action("Remove","Cart")';
+    $(document).ready(function () {
+        var obj = new Cart(setProductCountCartUrl, removeProduct, getCartUrl);
+        obj.Refresh();
+        ko.applyBindings(obj);
+    });
+</script>
+<div class="container">
+    <h1>Корзина</h1>
+
+    <div class="row">
+        <table class="table table">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Количество</th>
+                    <th>Итоговая сумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody data-bind="template: { name: 'productCartTemplate', foreach: products }">
+        </table>
+    </div>
+
+    <div class="row">
+        <a href="#" class="btn btn-success pull-right"> Оформить</a>
+    </div>
+</div>
+
+<script type="text/html" id="productCartTemplate">
+    <tr>
+        <td>
+            <label class="control-label" data-bind="text: name"></label>
+        </td>
+        <td>
+            <div class="form-group">
+                <div class="input-group">
+                    <a href="#" class="btn input-group-addon" data-bind="click: decrement">-</a>
+                    <input class="form-control" style="width:50px; text-align:center" data-bind="value: count" />
+                    <a href="#" class="btn input-group-addon" data-bind="click: increment">+</a>
+                </div>
+            </div>
+        </td>
+        <td>
+            <div class="input-group">
+               <span class="input-group-addon" style="border-right:1px solid #CCCCCC">
+                    <label class="control-label" data-bind="text: totalPrice"></label>
+               </span> 
+                <span class="input-group-addon">Р</span>
+            </div>
+        </td>
+        <td><a class="btn btn-danger" href="#" data-bind="click : $parent.remove">
+            <i class="icon-trash icon-white"></i>
+            Delete
+        </a></td>
+    </tr>
+</script>

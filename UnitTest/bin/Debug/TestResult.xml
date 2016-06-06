@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!--This file represents the results of running a test suite-->
+<test-results name="C:\Users\Alexander\Documents\Visual Studio 2012\Projects\Web\UnitTest\bin\Debug\UnitTest.dll" total="1" errors="1" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2015-12-03" time="12:40:55">
+  <environment nunit-version="2.6.4.14350" clr-version="2.0.50727.5420" os-version="Microsoft Windows NT 6.1.7601 Service Pack 1" platform="Win32NT" cwd="C:\Users\Alexander\Documents\Visual Studio 2012\Projects\Web\UnitTest\bin\Debug" machine-name="SERGEY-PC" user="Alexander" user-domain="SERGEY-PC" />
+  <culture-info current-culture="ru-RU" current-uiculture="ru-RU" />
+  <test-suite type="Assembly" name="C:\Users\Alexander\Documents\Visual Studio 2012\Projects\Web\UnitTest\bin\Debug\UnitTest.dll" executed="True" result="Failure" success="False" time="0.508" asserts="0">
+    <results>
+      <test-suite type="Namespace" name="UnitTest" executed="True" result="Failure" success="False" time="0.503" asserts="0">
+        <results>
+          <test-suite type="TestFixture" name="ProductControllerTest" executed="True" result="Failure" success="False" time="0.502" asserts="0">
+            <results>
+              <test-case name="UnitTest.ProductControllerTest.CreateMethod" executed="True" result="Error" success="False" time="0.497" asserts="0">
+                <failure>
+                  <message><![CDATA[Moq.MockException : 
+Expected invocation on the mock should never have been performed, but was 1 times: n => n.AddProduct(.product)
+No setups configured.
+
+Performed invocations:
+IRepository.AddProduct(Core.Product)
+IRepository.Save()]]></message>
+                  <stack-trace><![CDATA[в Moq.Mock.ThrowVerifyException(MethodCall expected, IEnumerable`1 setups, IEnumerable`1 actualCalls, Expression expression, Times times, Int32 callCount)
+в Moq.Mock.VerifyCalls(Interceptor targetInterceptor, MethodCall expected, Expression expression, Times times)
+в Moq.Mock.Verify[T,TResult](Mock`1 mock, Expression`1 expression, Times times, String failMessage)
+в Moq.Mock`1.Verify[TResult](Expression`1 expression, Times times)
+в UnitTest.ProductControllerTest.CreateMethod() в c:\Users\Alexander\Documents\Visual Studio 2012\Projects\Web\UnitTest\ProductControllerTest.cs:строка 30
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

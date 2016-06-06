@@ -1,0 +1,38 @@
+﻿@model Core.Product
+@{
+    string base64 = Convert.ToBase64String( Model.Image );
+    string imgSrc = String.Format( "data:image/gif;base64,{0}", base64 );  
+}
+<div class="row">
+<div class="col-sm-3 col-md-3 thumbnail">
+    <img src="@imgSrc" style="max-width:300px; max-height:150px;" />
+</div>
+<div class="col-sm-offset-4">
+    <h3>Цена: @Model.Price</h3>
+    <div class="row">
+        @Ajax.ActionLink( "Добавить в корзину", "AddToCart", "Home", new { id = Model.Id },new AjaxOptions() { OnSuccess = "IncrementCart" }, new { @class = "btn btn-success" } )
+    </div>
+</div>
+</div>
+
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="active">
+            <a data-toggle="tab" href="#Description" aria-expanded="true">Описание</a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#Comments">Комментарии</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active in" id="Description">
+            <p>@Model.Description</p>
+        </div>
+        <div class="tab-pane fade" id="Comments">
+            <p>Комментарии отсутствуют</p>
+        </div>
+    </div>
+</div>
+
+
+

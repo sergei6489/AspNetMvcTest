@@ -1,0 +1,103 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Layout</title>
+    @Styles.Render( "~/Content/css" )
+    @Scripts.Render( "~/bundles/jquery" )
+    @Scripts.Render( "~/bundles/jqueryui" )
+    @Scripts.Render( "~/bundles/jqueryval" )
+    @Scripts.Render( "~/bundles/knockout" )
+    @Scripts.Render( "~/Bootstrap.js" )
+    @Scripts.Render( "~/Scripts/Cart.js" )   
+    <style>
+        .margin-top
+        {
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        $(document).ready(function () {
+            $.validator.methods.range = function (value, element, param) {
+                var globalizedValue = value.replace(",", ".");
+                return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+            }
+
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+            }
+            $('.carousel').carousel();
+        });
+        function IncrementCart(data) {
+            if (data == 'True') {
+                var res = $("#countProducts");
+                res.text(parseInt(res.text()) + 1);
+            }
+        }
+    </script>
+    <div class="container">
+            <div class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand hidden-xs hidden-sm" href="@Url.Action( "Index", "Home" )">Project</a>
+            </div>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            <div class="collapse navbar-collapse" id="mainNavBar">
+                <ul class="nav navbar-nav navbar-right">
+                    @if( !System.Web.HttpContext.Current.User.Identity.IsAuthenticated )
+                    {
+                        <li>@Html.ActionLink( "Регистрация", "Add", "User" )</li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Войти<strong class="caret"></strong></a>
+                            <div class="dropdown-menu" style="padding: 15px;">
+                                <form action="@Url.Action("LogIn","User")" method="post" class="form-horizontal navbar-form">
+                                        <input class="form-control margin-top" name="UserName" placeholder="Email" />
+                                        <input class="form-control margin-top" name="Password" placeholder="Password" />
+                                        <input type="submit" class="btn btn-success margin-top pull-right" value="Войти" />
+                                </form>
+                            </div>
+                        </li>
+                    }
+                    <li><a style="font-size: 14px;" href="@Url.Action("Index","Cart")"><i class="glyphicon glyphicon-shopping-cart"></i>&nbsp;Корзина&nbsp;
+                    <span class="badge" id="countProducts">@ViewBag.CountProducts</span>
+                    </a>
+                    </li>
+                    @if( ViewBag.IsAdmin )
+                    {
+                        <li>
+                            <a class="dropdown-toggle" href="#" data-toggle="dropdown">Админка
+                        <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Пользователи","GetUsers","User")</li>
+                                <li>@Html.ActionLink("Добавить товар", "Create","Product")</li>
+                            </ul>
+                        </li>
+                    }
+
+                    @if( System.Web.HttpContext.Current.User.Identity.IsAuthenticated )
+                    {
+                        <li>@Html.ActionLink( "Выйти", "LogOut", "User",null, new { @class = "navbar-right" } ) </li>    
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 55px">
+        @RenderBody()
+    </div>
+    </div>
+</body>
+</html>
