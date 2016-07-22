@@ -25,10 +25,17 @@ namespace Web.IocNinject
                 cart = new Cart();
                 HttpContext.Current.Session[sessionKey] = cart;
             }
-            foreach( var data in cart.Products )
+            foreach( var data in cart.Products.ToList() )
             {
                 prod = repository.GetProductById(data.Id);
-                data.Price = prod.Price;
+                if (prod == null)
+                {
+                    cart.Products.Remove(data);
+                }
+                else
+                {
+                    data.Price = prod.Price;
+                }
             }
             return cart;
         }
